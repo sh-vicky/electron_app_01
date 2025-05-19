@@ -5,16 +5,45 @@ electron 어플리케이션 각 창은 local HTML 파일이나 원격 URL 로 �
 <html lang="ko">
   <head>
     <meta charset="utf-8">
-    <title>Hello World!</title>
+    <!--<title>Hello World!</title>-->
+    <title>Apple!</title>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+<!--    <h1>Hello World!</h1>
+    <div>
+      <p>
+        We are using Node.js <span id="node-version"></span>,
+        Chromium <span id="chrome-version"></span>,
+        and Electron <span id="electron-version"></span>.
+      </p>
+    </div>-->
 <!--
 다음처럼 스크립트 추가 가능
 <script src="./renderer.js"></script>
 -->
+    <h1>사과!</h1>
+    <div>
+      <p>
+        <button id="btnCount">사과 갯수 확인하기</button>
+        <button id="btnSteal">사과 가져오기</button>
+        <button id="btnBroadcast">갯수 알리기</button>
+      </p>
+      <p>
+        남은 사과는 <span id="txtCount"></span>개 입니다.
+      </p>
+    </div>
+    <script>
+      const electron = require('electron');
+      const print = (num = 10) => document.getElementById('txtCount').innerText = num;
+      document.getElementById('btnCount').onclick = () => electron.ipcRenderer.send('reqCount');
+      document.getElementById('btnSteal').onclick = () => electron.ipcRenderer.send('reqSteal');
+      document.getElementById('btnBroadcast').onclick = () => electron.ipcRenderer.send('reqBroadcast');
+
+      // 메인 프로세스로부터 count 신호가 수신되면 수신된 데이터를 출력.
+      // ipcRenderer 는 렌더러 프로세스에서 메인 프로세스로 통신할 때 사용.
+      electron.ipcRenderer.on('count', (e, count) => print(count));
+
+      print();
+    </script>
   </body>
 </html>
